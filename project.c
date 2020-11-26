@@ -9,6 +9,10 @@ typedef struct
 	char genre[50];
 } My_p;
 
+void Add(My_p* contend, int num);
+void Look(My_p* contend, int num);
+
+
 int main()
 {
 	int input;
@@ -38,6 +42,7 @@ int main()
 		else if (input ==1)
 		{
 			printf("\n[플레이리스트 보기]\n\n");	
+			Look(p,cnt);
 		}
         
 		else if (input ==2)
@@ -47,7 +52,9 @@ int main()
         
 		else if (input ==3)
 		{
-			printf("\n[노래 추가하기]\n\n");	
+			printf("\n[노래 추가하기]\n\n");
+			Add(p,cnt);
+			cnt++;	
 		}
         
         else if (input == 4)
@@ -72,6 +79,49 @@ int main()
         }
     }
 }	
+
+void Add(My_p* contend, int num)
+{
+	int input;
+	if (num < 100)
+	{
+		printf("노래 제목 : ");
+		scanf("%s", contend[num].title);
+		printf("가수 : ");
+		scanf("%s", contend[num].singer);
+		printf("장르( 발라드 / 힙합 / 댄스곡 / 팝송) : ");
+		scanf("%s", contend[num].genre);
+		printf("*완료*\n\n\n");
+	}
+	else 
+	{
+		printf("@저장공간이 부족합니다.\n\n\n");
+	}
+}
+
+void Look(My_p* contend, int num)
+{
+	if (num > 0)
+	{
+		for (int i = 0; i <num; i++)
+		{
+			printf("%d. 노래제목: %s  가수: %s  장르: %s\n\n", i+1, contend[i].title, contend[i].singer,contend[i].genre);
+		}
+		printf("*완료*\n\n\n");
+	}
+	else
+	{
+		printf("@플레이리스트가 비었습니다.");
+	}
+}
+
+
+
+
+
+
+
+
 
 
 
