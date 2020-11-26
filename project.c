@@ -13,6 +13,7 @@ void Add(My_p* contend, int num);
 void Look(My_p* contend, int num);
 void Delete(My_p* contend, int * num, int n);
 void Save(My_p* contend, int num);
+int Open(My_p* contend, int* num);
 
 int Find (My_p* contend, int num)
 {
@@ -88,6 +89,7 @@ int main()
         if (input == 0)
 		{
             printf("\n[플레이리스트 불러오기]\n\n");
+			Open(p,&cnt);
 		}
 		
 		else if (input ==1)
@@ -218,7 +220,24 @@ void Save(My_p* contend, int num)
    
 }
 
+int Open(My_p* contend, int* num)
+{
+    int i;
+    FILE* f = fopen("Music_Playlist.txt", "r");
 
+    if (f == NULL)
+    {
+        printf(" 오류 \n");
+        return 1;
+    }
+
+    while (1) {
+        fscanf(f, "%s %s %s", contend[*num].title, contend[*num].singer, contend[*num].genre);
+        if (feof(f) != 0)
+            break;
+        (*num)++;
+    }
+}
 
 
 
