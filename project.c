@@ -11,7 +11,7 @@ typedef struct
 
 void Add(My_p* contend, int num);
 void Look(My_p* contend, int num);
-
+void Delete(My_p* contend, int * num, int n);
 
 int main()
 {
@@ -60,6 +60,7 @@ int main()
         else if (input == 4)
 		{
             printf("\n[노래 삭제하기]\n\n");
+			Delete(p,&cnt, cnt);
         }
 		
 		else if (input == 5)
@@ -115,7 +116,38 @@ void Look(My_p* contend, int num)
 	}
 }
 
+void Delete(My_p* contend, int* num, int n)
+{
+	char remove[50];
+	int j;
+	if (n>0)
+	{
+		printf("삭제할 노래 : ");
+		scanf("%s", remove);
+		
+		for (int i= 0 ; i< n; i++)
+		{
+			if(strcmp(remove, contend[i].title) == 0)
+			{
+				for (j = i; j<100; j++)
+				{
+					strcpy(contend[j].title, contend[j+1].title);
+					strcpy(contend[j].singer, contend[j+1].singer);
+					strcpy(contend[j].genre, contend[j+1].genre);
+				}
+				printf("*노래가 삭제되었습니다.\n\n\n");
+				(*num)--;
+			}
+			else {
+				printf("삭제할 노래가 없습니다.");
+			}
+		}
 
+	}
+	else{
+		printf("@플레이리스트가 비었습니다.");
+	}
+}
 
 
 
