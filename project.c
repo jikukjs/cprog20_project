@@ -12,6 +12,7 @@ typedef struct
 void Add(My_p* contend, int num);
 void Look(My_p* contend, int num);
 void Delete(My_p* contend, int * num, int n);
+void Save(My_p* contend, int num);
 
 int Find (My_p* contend, int num)
 {
@@ -117,6 +118,7 @@ int main()
 		else if (input == 5)
 		{
 			printf("\n[플레이리스트 저장하기]\n\n");
+			Save(p,cnt);
 		}
         
         else if (input == 6)
@@ -200,7 +202,21 @@ void Delete(My_p* contend, int* num, int n)
 	}
 }
 
+void Save(My_p* contend, int num)
+{
+    if (num > 0)
+    {
+        int i;
+        FILE* f = fopen("Music_Playlist.txt", "w");
 
+        for (i = 0; i < num; i++)
+        {
+            fprintf(f, "%d %s %s %s\n",i+1, contend[i].title, contend[i].singer, contend[i].genre);
+        }
+        printf("@저장 완료\n\n\n");
+    }
+   
+}
 
 
 
