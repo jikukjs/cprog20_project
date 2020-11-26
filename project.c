@@ -13,13 +13,63 @@ void Add(My_p* contend, int num);
 void Look(My_p* contend, int num);
 void Delete(My_p* contend, int * num, int n);
 
+int Find (My_p* contend, int num)
+{
+    char search[50];
+    int i,search_num;
+
+    if (num>0)
+    {
+        printf("찾을 노래 : ");
+        scanf("%s", search);
+
+        for (i =0; i< num; i++)
+        {
+            if (strcmp(search, contend[i].title) ==0)
+            {
+                search_num= i;
+                break;
+            }
+            else
+            {
+                search_num = -1;
+                continue;
+            }
+        }
+    }
+    else
+    {
+    	search_num = -2;
+	}
+    return search_num;
+}
+
+void print_Find (My_p* contend, int num, int(*func)(My_p*, int))
+{
+	int index = func(contend,num);
+    if (index>=0)
+    {
+        printf("%d. 노래 : %s  가수 : %s  장르 : %s\n\n", index+1, contend[index].title, contend[index].singer, contend[index].genre);
+    }
+    else if (index==-1)
+    {
+        printf("찾는 곡이 없습니다.");
+    }
+    else if (index==-2)
+    {
+        printf("리스트가 비어있습니다.");
+    }
+}
+
+
+
 int main()
 {
 	int input;
     My_p p[100];
     int cnt = 0;
 
-	printf("나의 플레이리스트");	
+	printf("나의 플레이리스트\n\n");	
 
 	while (1)
     {
@@ -48,6 +98,7 @@ int main()
 		else if (input ==2)
 		{
 			printf("\n[노래 찾기]\n\n");
+			print_Find(p,cnt,Find);
 		}
         
 		else if (input ==3)
@@ -148,9 +199,6 @@ void Delete(My_p* contend, int* num, int n)
 		printf("@플레이리스트가 비었습니다.");
 	}
 }
-
-
-
 
 
 
