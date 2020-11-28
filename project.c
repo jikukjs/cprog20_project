@@ -7,13 +7,16 @@ typedef struct
 	char title[50];
 	char singer[50];
 	char genre[50];
+	int like;
 } My_p;
 
 void Add(My_p* contend, int num);
 void Look(My_p* contend, int num);
 void Delete(My_p* contend, int * num, int n);
+void Filter(My_p* content, int num);
 void Save(My_p* contend, int num);
 int Open(My_p* contend, int* num);
+
 
 int Find (My_p* contend, int num)
 {
@@ -78,11 +81,12 @@ int main()
         printf("{플레이리스트} \n\n");
         printf("0. 플레이리스트 불러오기\n");
         printf("1. 플레이리스트 보기\n");
-        printf("2. 노래 찾기\n");
-        printf("3. 노래 추가하기\n");
-        printf("4. 노래 삭제하기\n");
-        printf("5. 플레이리스트 저장하기\n");
-        printf("6. 종료하기\n");
+        printf("2. 플레이리스트 필터\n");
+		printf("3. 노래 찾기\n");
+        printf("4. 노래 추가하기\n");
+        printf("5. 노래 삭제하기\n");
+        printf("6. 플레이리스트 저장하기\n");
+        printf("7. 종료하기\n");
         printf("-> 입력 : ");
         scanf("%d", &input);
 
@@ -100,30 +104,36 @@ int main()
         
 		else if (input ==2)
 		{
+			printf("\n[플레이리스트 필터]\n\n");
+			Filter(p,cnt);
+		}		
+
+		else if (input ==3)
+		{
 			printf("\n[노래 찾기]\n\n");
 			print_Find(p,cnt,Find);
 		}
         
-		else if (input ==3)
+		else if (input ==4)
 		{
 			printf("\n[노래 추가하기]\n\n");
 			Add(p,cnt);
 			cnt++;	
 		}
         
-        else if (input == 4)
+        else if (input == 5)
 		{
             printf("\n[노래 삭제하기]\n\n");
 			Delete(p,&cnt, cnt);
         }
 		
-		else if (input == 5)
+		else if (input == 6)
 		{
 			printf("\n[플레이리스트 저장하기]\n\n");
 			Save(p,cnt);
 		}
         
-        else if (input == 6)
+        else if (input == 7)
 		{
 			printf("\n[종료하기]\n");
             printf("프로그램 종료\n\n\n");
@@ -147,6 +157,8 @@ void Add(My_p* contend, int num)
 		scanf("%s", contend[num].singer);
 		printf("장르( 발라드 / 힙합 / 댄스곡 / 팝송) : ");
 		scanf("%s", contend[num].genre);
+		printf("즐겨찾기(좋아요:1, 그 외:0) :  ");
+		scanf("%d", &contend[num].like);
 		printf("*완료*\n\n\n");
 	}
 	else 
@@ -173,7 +185,7 @@ void Look(My_p* contend, int num)
 
 void Delete(My_p* contend, int* num, int n)
 {
-	char remove[50];
+	char remove[10];
 	int j;
 	if (n>0)
 	{
@@ -184,11 +196,12 @@ void Delete(My_p* contend, int* num, int n)
 		{
 			if(strcmp(remove, contend[i].title) == 0)
 			{
-				for (j = i; j<100; j++)
+				for (j = i; j<n-1; j++)
 				{
 					strcpy(contend[j].title, contend[j+1].title);
 					strcpy(contend[j].singer, contend[j+1].singer);
 					strcpy(contend[j].genre, contend[j+1].genre);
+					contend[j].like = contend[j+1].like;
 				}
 				printf("*노래가 삭제되었습니다.\n\n\n");
 				(*num)--;
@@ -203,6 +216,62 @@ void Delete(My_p* contend, int* num, int n)
 		printf("@플레이리스트가 비었습니다.");
 	}
 }
+
+void Filter (My_p* content, int num)
+{
+	int input;
+	char f_content[10];
+	int i;
+	
+	if (num>0)
+	{
+		printf("어떤 필터를 적용하시겠습니까? (1. 가수/ 2. 장르/ 3. 즐겨찾기): ");
+		scanf("%d", &input);
+
+		if (input ==1)
+		{
+			printf("가수의 이름 입력: ");
+			scanf("%s", f_content);
+			for (i=0; i<num; i++)
+			{	
+				if (strcmp(f_content, content[i].singer)== 0)
+				{
+					printf("%d. 노래제목: %s  가수: %s  장르: %s\n\n", i+1, content[i].title, content[i].singer,content[i].genre);
+				}
+			}	
+		}
+		else if (input == 2)
+		{
+			printf("장르의 종류 입력: ");
+			scanf("%s", f_content);
+			for (i=0; i<num; i++)
+			{
+				if (strcmp(f_content, content[i].genre) == 0)
+				{
+                	printf("%d. 노래제목: %s  가수: %s  장르: %s\n\n", i+1, content[i].title, content[i].singer,content[i].genre);
+				}
+			}	
+		}
+		else if (input == 3)
+		{
+			for (i = 0; i<num; i++)
+			{
+				if(content[i].like == 1)
+				{
+                	printf("%d. 노래제목: %s  가수: %s  장르: %s ->  좋아요\n\n", i+1, content[i].title, content[i].singer,content[i].genre);                
+				}
+			}
+		}
+		else 
+		{
+			printf("잘못 입력하셨습니다.");
+		}
+	}
+	else {
+		printf("@플레이리스트가 비었습니다.");
+	}
+}
+
 
 void Save(My_p* contend, int num)
 {
