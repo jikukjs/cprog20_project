@@ -398,6 +398,7 @@ void Chart(My_p* content, int num )
                 }
             }
 		} 
+		free(chart_list);
 	}	
 }
 void Save(My_p* content, int num)
