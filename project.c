@@ -8,10 +8,12 @@ typedef struct
 	char singer[50];
 	char genre[50];
 	int like;
+	int play_cnt;
 } My_p;
 
 void Add(My_p* contend, int num);
 void Look(My_p* contend, int num);
+void Play(My_p* content, int num);
 void Delete(My_p* contend, int * num, int n);
 void Filter(My_p* content, int num);
 void Save(My_p* contend, int num);
@@ -82,11 +84,13 @@ int main()
         printf("0. 플레이리스트 불러오기\n");
         printf("1. 플레이리스트 보기\n");
         printf("2. 플레이리스트 필터\n");
-		printf("3. 노래 찾기\n");
-        printf("4. 노래 추가하기\n");
-        printf("5. 노래 삭제하기\n");
-        printf("6. 플레이리스트 저장하기\n");
-        printf("7. 종료하기\n");
+		printf("3. 노래 재생하기\n");
+		printf("4. 노래 찾기\n");
+        printf("5. 노래 추가하기\n");
+        printf("6. 노래 삭제하기\n");
+        printf("7. 나의 노래 차트보기\n");
+		printf("8. 플레이리스트 저장하기\n");
+        printf("9. 종료하기\n");
         printf("-> 입력 : ");
         scanf("%d", &input);
 
@@ -110,30 +114,40 @@ int main()
 
 		else if (input ==3)
 		{
+			printf("\n[노래 재생하기]\n\n");
+			Play(p,cnt);
+		}
+		else if (input ==4)
+		{
 			printf("\n[노래 찾기]\n\n");
 			print_Find(p,cnt,Find);
 		}
         
-		else if (input ==4)
+		else if (input ==5)
 		{
 			printf("\n[노래 추가하기]\n\n");
 			Add(p,cnt);
 			cnt++;	
 		}
         
-        else if (input == 5)
+        else if (input == 6)
 		{
             printf("\n[노래 삭제하기]\n\n");
 			Delete(p,&cnt, cnt);
         }
 		
-		else if (input == 6)
+		else if (input == 7)
+		{
+			printf("\n[나의 노래차트]\n\n");
+		}		
+
+		else if (input == 8)
 		{
 			printf("\n[플레이리스트 저장하기]\n\n");
 			Save(p,cnt);
 		}
         
-        else if (input == 7)
+        else if (input == 9)
 		{
 			printf("\n[종료하기]\n");
             printf("프로그램 종료\n\n\n");
@@ -159,6 +173,7 @@ void Add(My_p* contend, int num)
 		scanf("%s", contend[num].genre);
 		printf("즐겨찾기(좋아요:1, 그 외:0) :  ");
 		scanf("%d", &contend[num].like);
+		contend[num].play_cnt =0;
 		printf("*완료*\n\n\n");
 	}
 	else 
@@ -182,6 +197,25 @@ void Look(My_p* contend, int num)
 		printf("@플레이리스트가 비었습니다.");
 	}
 }
+
+void Play(My_p* content, int num)
+{
+	int play_n;
+	printf("재생할 음악의 번호를 입력하세요.: ");
+	scanf("%d", &play_n);
+	
+	if (0< play_n && play_n <=num)
+	{
+		printf("-%d. %s의 노래 %s 재생 중-\n\n\n", play_n, content[play_n-1].singer, content[play_n-1].title);
+		content[play_n-1].play_cnt ++;
+		printf("%d",content[play_n-1].play_cnt);
+	} 
+	else 
+	{
+		printf("노래가 없습니다.\n\n\n");
+	}
+}
+
 
 void Delete(My_p* contend, int* num, int n)
 {
