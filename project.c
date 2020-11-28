@@ -16,6 +16,7 @@ void Look(My_p* contend, int num);
 void Play(My_p* content, int num);
 void Delete(My_p* contend, int * num, int n);
 void Filter(My_p* content, int num);
+void Chart(My_p* content, int num);
 void Save(My_p* contend, int num);
 int Open(My_p* contend, int* num);
 
@@ -139,6 +140,7 @@ int main()
 		else if (input == 7)
 		{
 			printf("\n[나의 노래차트]\n\n");
+			Chart(p,cnt);
 		}		
 
 		else if (input == 8)
@@ -206,9 +208,9 @@ void Play(My_p* content, int num)
 	
 	if (0< play_n && play_n <=num)
 	{
-		printf("-%d. %s의 노래 %s 재생 중-\n\n\n", play_n, content[play_n-1].singer, content[play_n-1].title);
+		printf("-%d. %s의 노래 %s 재생 중-\n\n", play_n, content[play_n-1].singer, content[play_n-1].title);
 		content[play_n-1].play_cnt ++;
-		printf("%d",content[play_n-1].play_cnt);
+		printf("총 %d번 재생\n\n\n",content[play_n-1].play_cnt);
 	} 
 	else 
 	{
@@ -236,6 +238,7 @@ void Delete(My_p* contend, int* num, int n)
 					strcpy(contend[j].singer, contend[j+1].singer);
 					strcpy(contend[j].genre, contend[j+1].genre);
 					contend[j].like = contend[j+1].like;
+					contend[j].play_cnt = contend[j+1].play_cnt;
 				}
 				printf("*노래가 삭제되었습니다.\n\n\n");
 				(*num)--;
@@ -306,7 +309,96 @@ void Filter (My_p* content, int num)
 	}
 }
 
+void Chart(My_p* content, int num )
+{
+	int i ;
+	if(num>0)
+	{
+		int *chart_list = malloc(sizeof(int) *num);
+		int temp;
 
+		for (i = 0; i<num; i++)
+		{
+			chart_list[i] = content[i].play_cnt;
+		}
+
+		for (i = 0; i<num-1; i++)
+		{
+			for (int j =i+1; j<num; j++)
+			{
+				if (chart_list[i]< chart_list[j])
+				{
+					temp = chart_list[j];
+					chart_list[j] = chart_list[i];
+					chart_list[i] = temp;
+				}
+			}
+		}
+		
+		if (num>5)
+		{
+			for (i=0; i<5; i++)
+			{
+				if (i ==0)
+				{
+					for(int j=0; j<num; j++)
+					{
+						if(chart_list[i] == content[j].play_cnt)
+						{
+							printf("%d. %s  %s  재생 수:%d\n",j+1,content[j].title, content[j].singer, content[j].play_cnt);
+						}
+					}
+				}
+				else 
+				{
+					if(chart_list[i] == chart_list[i-1])
+						continue;
+					else
+					{
+						for(int j=0; j<num; j++)
+    	                {
+	                        if(chart_list[i] == content[j].play_cnt)
+            	            {
+        	                    printf("%d. %s  %s  재생 수:%d\n",j+1,content[j].title, content[j].singer, content[j].play_cnt);
+                	        }
+               			}	
+					}
+				}
+			}
+		}
+		else 
+		{
+			for (i=0; i<num; i++)
+            {
+                if (i ==0)
+                {
+	                for(int j=0; j<num; j++)
+	                {
+                        if(chart_list[i] == content[j].play_cnt)
+                        {
+	                        printf("%d. %s  %s  재생 수:%d\n",j+1,content[j].title, content[j].singer, content[j].play_cnt);
+                        }
+                    }
+                }
+                else
+                {
+                    if(chart_list[i] == chart_list[i-1])
+                        continue;
+                    else
+                    {
+                    	for(int j=0; j<num; j++)
+                        {
+                        	if(chart_list[i] == content[j].play_cnt)
+                            {
+                                printf("%d. %s  %s  재생 수:%d\n",j+1,content[j].title, content[j].singer, content[j].play_cnt);
+                            }
+                        }
+                    }
+                }
+            }
+		} 
+	}	
+}
 void Save(My_p* contend, int num)
 {
     if (num > 0)
