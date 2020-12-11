@@ -9,6 +9,7 @@ typedef struct music
 	char genre[50];
 	int like;
 	int play_cnt;
+	int year;
 	struct music* next;
 } My_p;
 
@@ -18,6 +19,9 @@ void Add (My_p** list_head, My_p*(*func)(My_p*,char*));
 void Look (My_p* list_head);
 void Delete (My_p* list_head, My_p*(*func)(My_p*,char*));
 void Find (My_p* list_head, My_p*(*func)(My_p*,char*));
+void Filter (My_p* list_head);
+
+
 
 int main()
 {
@@ -57,6 +61,7 @@ int main()
 		else if (input ==2)
 		{
 			printf("\n[플레이리스트 필터]\n\n");
+			Filter(list_head);
 		}		
 
 		else if (input ==3)
@@ -125,7 +130,7 @@ void Add(My_p** list_head, My_p*(*func)(My_p*,char* ))
 	char new_title[10];
 	char new_singer[10];
 	char new_genre[10];
-	int new_like;
+	int new_like,new_year;
 	int new_cnt = 0;
 	char name[20];
 		
@@ -148,12 +153,15 @@ void Add(My_p** list_head, My_p*(*func)(My_p*,char* ))
 		scanf("%s", new_singer);
 		printf("장르 : ");
 		scanf("%s", new_genre);
+		printf("연도(ex 2020)*연도를 모른다면 1000을입력하세요 : ");
+		scanf("%d", &new_year);
 		printf("좋아요(1) / 그 외(0) :");
 		scanf("%d", &new_like);
 	
 		strcpy(new_node -> title , new_title);
 		strcpy(new_node -> singer , new_singer);
 		strcpy(new_node -> genre , new_genre);
+		new_node -> year = new_year;
 		new_node -> like = new_like;
 		new_node -> play_cnt = new_cnt;
 	
@@ -237,6 +245,62 @@ void Find(My_p* list_head,My_p*(*func)(My_p*,char*))
 		}
 	}
 	else
-		printf("존재하지 않는 옷입니다.\n");
+		printf("존재하지 않는 노래입니다.\n");
 }
 
+void Filter (My_p* list_head)
+{
+	int input;
+	char content[10];
+	My_p* tmp = list_head;
+
+	printf("필터 선택? (1. 가수 / 2. 장르/ 3. 좋아요)");
+	scanf("%d", &input);
+
+	switch (input){
+		case 1:
+			printf("가수 입력: ");
+			scanf("%s", content);
+
+			while(tmp != NULL)
+			{
+				if (strcmp(tmp->singer, content)==0)
+				{
+					printf("가수 : %s  노래 제목 : %s  장르: %s\n",tmp->singer, tmp->title, tmp->genre);
+				}
+				tmp = tmp -> next;
+			}
+			break;
+		
+		case 2:
+			printf("장르 입력: ");
+			scanf("%s", content);
+
+			while(tmp != NULL)
+			{
+				if (strcmp(tmp->genre, content)==0)
+				{
+					printf("장르 : %s  노래 제목 : %s  가수 : %s\n",tmp->genre, tmp->title, tmp->singer);
+				}
+				tmp = tmp -> next;
+			}
+			break;
+
+		case 3:
+			printf("좋아요 표시 음악");
+
+			while(tmp != NULL)
+			{
+				if (tmp -> like ==1)
+				{
+					printf("노래 제목 : %s  가수 : %s  장르: %s\n",tmp->title, tmp->singer, tmp->genre);
+				}
+				tmp = tmp -> next;
+			}
+			break;
+
+		default:
+			printf("잘못입력했습니다");
+			break;
+	}
+}
