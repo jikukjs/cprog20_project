@@ -14,13 +14,15 @@ typedef struct music
 } My_p;
 
 
+
 My_p* Check(My_p* list_head,char* name);
 void Add (My_p** list_head, My_p*(*func)(My_p*,char*));
 void Look (My_p* list_head);
 void Delete (My_p* list_head, My_p*(*func)(My_p*,char*));
 void Find (My_p* list_head, My_p*(*func)(My_p*,char*));
 void Filter (My_p* list_head);
-
+My_p* Open(My_p* list_head);
+void Save(My_p* list_head);
 
 
 int main()
@@ -50,6 +52,7 @@ int main()
         if (input == 0)
 		{
             printf("\n[플레이리스트 불러오기]\n\n");
+			list_head = Open(list_head);
 		}
 		
 		else if (input ==1)
@@ -94,6 +97,7 @@ int main()
 		else if (input == 8)
 		{
 			printf("\n[플레이리스트 저장하기]\n\n");
+			Save(list_head);
 		}
         
         else if (input == 9)
@@ -127,9 +131,9 @@ void Add(My_p** list_head, My_p*(*func)(My_p*,char* ))
 	My_p* new_node;
 	My_p* check_node;
 
-	char new_title[10];
-	char new_singer[10];
-	char new_genre[10];
+	char new_title[20];
+	char new_singer[20];
+	char new_genre[20];
 	int new_like,new_year;
 	int new_cnt = 0;
 	char name[20];
@@ -251,7 +255,7 @@ void Find(My_p* list_head,My_p*(*func)(My_p*,char*))
 void Filter (My_p* list_head)
 {
 	int input;
-	char content[10];
+	char content[20];
 	My_p* tmp = list_head;
 
 	printf("필터 선택? (1. 가수 / 2. 장르/ 3. 좋아요)");
@@ -287,7 +291,7 @@ void Filter (My_p* list_head)
 			break;
 
 		case 3:
-			printf("좋아요 표시 음악");
+			printf("[좋아요 표시 음악]\n\n");
 
 			while(tmp != NULL)
 			{
@@ -303,4 +307,53 @@ void Filter (My_p* list_head)
 			printf("잘못입력했습니다");
 			break;
 	}
+}
+
+My_p* Open(My_p* list_head)
+{
+	My_p* new_node;
+
+	FILE* f =fopen("Music_Playlist.txt","r+");
+
+	if(f == NULL)
+	{
+		printf("내용없음 \n");
+		return NULL;
+	}
+
+	while(1)
+	{
+		new_node=(My_p*) malloc (sizeof(My_p));
+	
+		fscanf(f, "%s %s %s %d %d %d\n", new_node->title,new_node->singer, new_node-> genre , &new_node->like, &new_node->play_cnt, &new_node->year);
+
+		if (feof(f)!=0)
+			break;
+		new_node->next=list_head;
+		list_head=new_node;
+	}
+	fclose(f);
+	return list_head;
+}
+
+void Save(My_p* list_head)
+{
+	My_p* tmp;
+	FILE* f =fopen("Music_Playlist.txt","w+");
+	
+	if(f==NULL)
+	{
+		printf("내용없음\n");
+		return;
+	}
+	while(list_head)
+	{
+		tmp = list_head;
+		fprintf(f, "%s %s %s %d %d %d\n", tmp->title,tmp->singer, tmp-> genre , tmp->like, tmp->play_cnt, tmp->year);
+		
+		list_head=list_head->next;
+		free(tmp);
+	}
+	fclose(f);
+	printf("저장 완료\n");
 }
