@@ -17,7 +17,7 @@ My_p* Check(My_p* list_head,char* name);
 void Add (My_p** list_head, My_p*(*func)(My_p*,char*));
 void Look (My_p* list_head);
 void Delete (My_p* list_head, My_p*(*func)(My_p*,char*));
-
+void Find (My_p* list_head, My_p*(*func)(My_p*,char*));
 
 int main()
 {
@@ -66,6 +66,7 @@ int main()
 		else if (input ==4)
 		{
 			printf("\n[노래 찾기]\n\n");
+			Find(list_head,Check);
 		}
         
 		else if (input ==5)
@@ -212,6 +213,30 @@ void Delete(My_p* list_head, My_p*(*func)(My_p*,char*))
 			now = now->next;
 		}
 	}
+}
 
+void Find(My_p* list_head,My_p*(*func)(My_p*,char*))
+{
+	My_p* search_node;
+	char name[20];
+
+	printf("노래검색: ");
+	scanf("%s",name);
+	search_node=func(list_head,name);
+	
+	if(search_node)
+	{
+		if (search_node->like==1)
+		{
+			printf("%s의 노래는 %s가 불렀습니다. 장르는 %s이며 당신이 좋아합니다.", search_node->title, search_node->singer, search_node -> genre);
+		}
+
+		else
+		{
+			printf("%s의 노래는 %s가 불렀습니다. 장르는 %s이입니다.", search_node->title, search_node->singer, search_node -> genre);
+		}
+	}
+	else
+		printf("존재하지 않는 옷입니다.\n");
 }
 
