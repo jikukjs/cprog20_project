@@ -23,7 +23,7 @@ void Find (My_p* list_head, My_p*(*func)(My_p*,char*));
 void Filter (My_p* list_head);
 My_p* Open(My_p* list_head);
 void Save(My_p* list_head);
-
+void Play (My_p* list_head, My_p*(*func)(My_p*,char*));
 
 int main()
 {
@@ -70,6 +70,7 @@ int main()
 		else if (input ==3)
 		{
 			printf("\n[노래 재생하기]\n\n");
+			Play(list_head,Check);
 		}
 		else if (input ==4)
 		{
@@ -357,3 +358,27 @@ void Save(My_p* list_head)
 	fclose(f);
 	printf("저장 완료\n");
 }
+
+void Play(My_p* list_head,My_p*(*func)(My_p*,char*))
+{
+	My_p* search_node;
+	My_p* tmp = list_head;
+	char name[20];
+
+	printf("재생할 노래: ");
+	scanf("%s",name);
+	search_node=func(list_head,name);
+
+	if(search_node)
+	{
+		search_node -> play_cnt += 1;
+		printf("%s의 %s를 총 %d번 재생했습니다.\n", search_node->singer, search_node->title,search_node->play_cnt);
+	}
+	else 
+	{
+		("노래가 존재하지 않습니다\n");
+	}
+}
+
+
+
