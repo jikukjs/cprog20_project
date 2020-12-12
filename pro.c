@@ -16,10 +16,7 @@ typedef struct music
 My_p* Check(My_p* list_head,char* name);
 void Add (My_p** list_head, My_p*(*func)(My_p*,char*));
 void Look (My_p* list_head);
-
-// void Delete (My_p* list_head, My_p*(*func)(My_p*,char*));
 void Delete (My_p** list_head, My_p*(*func)(My_p*,char*));
-
 void Find (My_p* list_head, My_p*(*func)(My_p*,char*));
 void Filter (My_p* list_head);
 My_p* Open(My_p* list_head);
@@ -239,51 +236,6 @@ void Delete(My_p** list_head, My_p*(*func)(My_p*,char*))
         seek = seek->next;
     }
 } 
-
-
-
-
-/*
-void Delete(My_p* list_head, My_p*(*func)(My_p*,char*))
-{
-	My_p* check_node;
-	My_p* pre = list_head;
-	My_p* now = pre->next;
-
-	char name[30];
-	int del_choice;
-	int num=0;
-	printf("삭제할 노래 : ");
-	scanf("%s",name);
-	check_node=func(list_head,name);
-	if(check_node==NULL)
-	{
-		printf("존재하지 않는 옷입니다.\n");
-	}
-
-	else
-	{
-		while (now != NULL)
-		{
-			if(strcmp(list_head->title, check_node->title)==0)
-			{
-				list_head = list_head->next;
-				free(list_head);
-				break;
-			}
-			else if (strcmp(now->title, name)==0)
-			{
-				pre->next = now->next;
-				free(now);
-				break;
-			}
-			pre = now;
-			now = now->next;
-		}
-	}
-}
-*/
-
 
 void Find(My_p* list_head,My_p*(*func)(My_p*,char*))
 {
@@ -533,7 +485,3 @@ void Year(My_p* list_head)
 		tmp = tmp -> next;
 	}
 }	
-
-
-
-
