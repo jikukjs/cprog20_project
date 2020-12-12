@@ -13,8 +13,6 @@ typedef struct music
 	struct music* next;
 } My_p;
 
-
-
 My_p* Check(My_p* list_head,char* name);
 void Add (My_p** list_head, My_p*(*func)(My_p*,char*));
 void Look (My_p* list_head);
@@ -25,22 +23,24 @@ My_p* Open(My_p* list_head);
 void Save(My_p* list_head);
 void Play (My_p* list_head, My_p*(*func)(My_p*,char*));
 void Chart(My_p* list_head);
-
+void Year(My_p* list_head);
 
 int main()
 {
-	int input;
 	My_p* list_head = NULL;
 
 	printf("나의 플레이리스트");	
 
 	while (1)
     {
+		int chose;
+		int input;
+
 		printf("\n\n=========================\n\n");
         printf("{플레이리스트} \n\n");
         printf("0. 플레이리스트 불러오기\n");
         printf("1. 플레이리스트 보기\n");
-        printf("2. 플레이리스트 필터\n");
+        printf("2. 노래의 연도\n");
 		printf("3. 노래 재생하기\n");
 		printf("4. 노래 찾기\n");
         printf("5. 노래 추가하기\n");
@@ -65,13 +65,23 @@ int main()
 		else if (input ==1)
 		{
 			printf("\n[플레이리스트 보기]\n\n");	
-			Look(list_head);
+			printf("(1) 전체 리스트 보기  /  (2) 필터 리스트 보기 -> ");
+			scanf("%d", &chose);
+			printf("\n");
+			if(chose == 1){
+				Look(list_head);
+			}
+			else if (chose == 2) {
+				Filter(list_head);
+			}
+			else 
+				printf("잘못 입력했습니다.");
 		}
         
 		else if (input ==2)
 		{
-			printf("\n[플레이리스트 필터]\n\n");
-			Filter(list_head);
+			printf("\n[노래의 연도]\n\n");
+			Year(list_head);
 		}		
 
 		else if (input ==3)
@@ -461,4 +471,30 @@ void Chart(My_p* list_head)
 	} 
 	free(chart_list);
 }
+
+void Year(My_p* list_head)
+{
+	My_p* tmp = list_head;
+	int age,M_a;
+
+	printf("나이를 입력해주세요 : ");
+	scanf("%d",&age);
+
+	while (tmp != NULL)
+	{
+		M_a = tmp->year - (2020 - age +1) + 1;
+		if (M_a > 0)
+		{
+			printf("[%s]는/은 %d년 노래로 당신이 %d살일 때 나왔습니다.\n", tmp ->title, tmp->year, M_a);
+		}
+		else 
+		{
+			printf("[%s]는/은 %d년 노래로 당신이 태어나기 전에 나왔습니다.\n", tmp -> title,tmp->year);
+		}
+		tmp = tmp -> next;
+	}
+}	
+
+
+
 
