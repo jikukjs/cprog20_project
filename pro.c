@@ -24,6 +24,8 @@ void Filter (My_p* list_head);
 My_p* Open(My_p* list_head);
 void Save(My_p* list_head);
 void Play (My_p* list_head, My_p*(*func)(My_p*,char*));
+void Chart(My_p* list_head);
+
 
 int main()
 {
@@ -52,7 +54,12 @@ int main()
         if (input == 0)
 		{
             printf("\n[플레이리스트 불러오기]\n\n");
-			list_head = Open(list_head);
+			if( list_head == NULL)
+			{
+				list_head = Open(list_head);
+			}
+			else 
+				printf("이미 불러왔습니다.");
 		}
 		
 		else if (input ==1)
@@ -93,6 +100,7 @@ int main()
 		else if (input == 7)
 		{
 			printf("\n[나의 노래차트]\n\n");
+			Chart(list_head);
 		}		
 
 		else if (input == 8)
@@ -325,11 +333,13 @@ My_p* Open(My_p* list_head)
 	while(1)
 	{
 		new_node=(My_p*) malloc (sizeof(My_p));
-	
-		fscanf(f, "%s %s %s %d %d %d\n", new_node->title,new_node->singer, new_node-> genre , &new_node->like, &new_node->play_cnt, &new_node->year);
 
 		if (feof(f)!=0)
 			break;
+
+
+		fscanf(f, "%s %s %s %d %d %d\n", new_node->title,new_node->singer, new_node-> genre , &new_node->like, &new_node->play_cnt, &new_node->year);
+
 		new_node->next=list_head;
 		list_head=new_node;
 	}
@@ -380,5 +390,75 @@ void Play(My_p* list_head,My_p*(*func)(My_p*,char*))
 	}
 }
 
+void Chart(My_p* list_head)
+{
+	int num =0;
+	int cha;
+	My_p* tmp = list_head;
+	My_p* node = list_head;
+	My_p* n_list = list_head;
+	My_p* z_list; 	
 
+	while(tmp != NULL)
+	{
+		num+=1;
+		tmp = tmp -> next;
+	}
+	
+	int *chart_list = malloc(sizeof(int)*num);
+	
+	for (int i = 0; i<num; i++)
+	{
+		chart_list[i] = node->play_cnt;
+		node = node -> next;
+	}
+	
+	for (int i = 0; i<num-1; i++)
+	{
+		for (int j =i+1; j<num; j++)
+		{
+			if (chart_list[i]< chart_list[j])
+			{
+				cha = chart_list[j];
+				chart_list[j] = chart_list[i];
+				chart_list[i] = cha;
+			}
+		}
+	}
+	
+	for (int i=0; i<num; i++)
+    {
+		z_list = n_list;
+
+        	if (i ==0)
+            {
+	         	while(z_list!=NULL)
+	            {
+                	if(chart_list[i] == z_list -> play_cnt)
+                    {
+	                	printf("%s  %s  재생 수:%d\n",z_list -> title, z_list -> singer, z_list -> play_cnt);
+                    }
+					z_list = z_list-> next;
+				}
+            }
+            else
+            {
+            	if(chart_list[i] == chart_list[i-1])
+                	continue;
+                else
+                   	{
+                    	while(z_list!=NULL)
+                       	{
+                       		if(chart_list[i] == z_list->play_cnt)
+                            {
+                                printf("%s  %s  재생 수:%d\n",z_list -> title, z_list -> singer, z_list -> play_cnt);
+                            }
+							z_list = z_list->next;
+                        }
+                    }
+             }
+            
+	} 
+	free(chart_list);
+}
 
